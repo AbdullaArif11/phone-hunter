@@ -1,11 +1,27 @@
-function loadData(searchBrand = 'samsung'){
+function loadData(searchBrand = 'samsung',isshown=false) {
   fetch(`https://openapi.programming-hero.com/api/phones?search=${searchBrand}`)
     .then(res => res.json())
-    .then(data => displayPhones(data.data))
+    .then(data => displayPhones(data.data,isshown))
 }
-const displayPhones = phones => {
+
+const displayPhones = (phones='samsung',isshown) => {
   const phoneContainer = document.getElementById('phone-container');
   phoneContainer.innerHTML = '';
+
+  const showAll = document.getElementById('show-all');
+  if(phones.length > 12) {
+    showAll.classList.remove('hidden');
+  }else{
+    showAll.classList.add('hidden');
+  }
+  const phonest = phones;
+  phones = phones.slice(0, 12);
+  if(isshown){
+    phones = phonest;
+    showAll.classList.add('hidden');
+  }
+
+
   phones.forEach((phone) =>{
     console.log(phone);
 
@@ -26,11 +42,15 @@ const displayPhones = phones => {
   })
 }
 
-const search = () => {
+const search = (isshown) => {
   const searchfild = document.getElementById('search-field');
   const searchText = searchfild.value;
-  loadData(searchText);
-  console.log(searchText)
+  loadData(searchText,isshown);
+  console.log(searchText);
+}
+
+function showAllbtn() {
+  search(true);
 }
 
 loadData();
